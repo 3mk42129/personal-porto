@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SERVICES, TIMELINE, SKILLS, PROJECTS } from './data';
 import './style.css';
 
@@ -7,14 +7,80 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState({ text: '', type: '' });
+  const canvasRef = useRef(null);
 
-  // Clear submission statuses automatically
+  // Clear form alert messages automatically
   useEffect(() => {
     if (formStatus.text) {
       const timeout = setTimeout(() => setFormStatus({ text: '', type: '' }), 5000);
       return () => clearTimeout(timeout);
     }
   }, [formStatus.text]);
+
+  // HARDWARE-ACCELERATED DYNAMIC LIVE PAINT ENGINE
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+    let particles = [];
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const handleMouseMove = (e) => {
+      for (let i = 0; i < 2; i++) {
+        particles.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5,
+          radius: Math.random() * 25 + 20,
+          alpha: 0.5,
+          color: Math.random() > 0.4 ? '168, 32, 57' : '107, 18, 36' 
+        });
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
+    const renderLoop = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.008; 
+        p.radius += 0.2;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.beginPath();
+        let particleGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+        particleGlow.addColorStop(0, `rgba(${p.color}, ${p.alpha})`);
+        particleGlow.addColorStop(1, `rgba(${p.color}, 0)`);
+        ctx.fillStyle = particleGlow;
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      animationFrameId = requestAnimationFrame(renderLoop);
+    };
+    renderLoop();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
 
   const validateEmail = (email) => {
     return /^[\s@]+@[\s@]+\.[\s@]+$/.test(email);
@@ -33,7 +99,7 @@ function App() {
       return;
     }
 
-    setFormStatus({ text: 'Thank you for your message!  I will contact you soon :D.', type: 'success' });
+    setFormStatus({ text: 'Thank you for your message! We will get back to you soon.', type: 'success' });
     setFormData({ name: '', email: '', message: '' });
   };
 
@@ -47,18 +113,16 @@ function App() {
 
   return (
     <div className="portfolio-shell">
-      
-      {/* PREMIUM BACKGROUND ANIMATION NODES */}
-      <div className="ambient-background" aria-hidden="true">
+      <div className="ambient-background">
+        <canvas ref={canvasRef} className="live-paint-canvas" />
         <div className="glow-orb orb-maroon"></div>
         <div className="glow-orb orb-crimson"></div>
-        <div className="glow-orb orb-dark"></div>
         <div className="tech-grid-overlay"></div>
       </div>
 
       <header className="main-header">
         <div className="container nav-container">
-          <div className="logo" onClick={() => setActiveTab('home')}>Gh0st</div>
+          <div className="logo" onClick={() => setActiveTab('home')}>Gh0st.</div>
           <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>&#9776;</button>
           <nav className={`nav-menu ${menuOpen ? 'active' : ''}`}>
             <ul>
@@ -85,7 +149,7 @@ function App() {
           <>
             <section id="home">
               <img src="/images/Home_profile.jpeg" alt="Matthew Ken Susanto" className="profile-photo" />
-              <h1>Hi, I'm Matthew Ken Susanto</h1>
+              <h1>Hi, I'm <span className="dynamic-name">Matthew Ken Susanto</span></h1>
               <p>A Back-End programmer based in Bandung, Indonesia.</p>
               <p>Currently studying Computer Science at Binus University.</p>
               <div className="social-icons">
@@ -152,8 +216,8 @@ function App() {
                   <div className="timeline-year">{item.year}</div>
                   <div className="timeline-content card-item">
                     <h3>{item.title}</h3>
-                    <p><strong>{item.subtitle}</strong></p>
-                    <p style={{ whiteSpace: 'pre-line' }}>{item.desc}</p>
+                    <p className="timeline-subtitle">{item.subtitle}</p>
+                    <p className="timeline-desc">{item.desc}</p>
                   </div>
                 </div>
               ))}

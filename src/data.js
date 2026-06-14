@@ -20,7 +20,7 @@ export const TIMELINE = [
     year: "2021 - June 2024",
     title: "High School Diploma",
     subtitle: "Bina Bakti 2 Christian High School, Bandung, Indonesia",
-    desc: "Graduated with an overall score of 87%, ranking seventh in my grade. Have 5 years of organizational experience, joining the student council since the 7th grade (serving in the school event planning division across both junior and senior high). Participated in various interscholastic competitions, mainly sports."
+    desc: "Graduated with an overall score of 87%. Have 5 years of organizational experience, joining the student council since the 7th grade (serving in the school event planning division across both junior and senior high). Participated in various interscholastic competitions, mainly sports."
   }
 ];
 
