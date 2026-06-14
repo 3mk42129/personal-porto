@@ -47,6 +47,15 @@ function App() {
 
   return (
     <div className="portfolio-shell">
+      
+      {/* PREMIUM BACKGROUND ANIMATION NODES */}
+      <div className="ambient-background" aria-hidden="true">
+        <div className="glow-orb orb-maroon"></div>
+        <div className="glow-orb orb-crimson"></div>
+        <div className="glow-orb orb-dark"></div>
+        <div className="tech-grid-overlay"></div>
+      </div>
+
       <header className="main-header">
         <div className="container nav-container">
           <div className="logo" onClick={() => setActiveTab('home')}>Gh0st</div>
