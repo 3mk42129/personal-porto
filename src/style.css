@@ -488,6 +488,106 @@ body {
 .form-message.success { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
 
 /* ==========================================================================
+   8b. DYNAMIC COMMENTS WALL DEEP GLOW LAYOUT
+   ========================================================================== */
+.comments-wall-wrapper {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(168, 32, 57, 0.25);
+  text-align: left;
+}
+
+.comments-wall-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.comments-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+/* Custom slick dark scrollbar for the comments stream */
+.comments-stream::-webkit-scrollbar {
+  width: 5px;
+}
+.comments-stream::-webkit-scrollbar-track {
+  background: transparent;
+}
+.comments-stream::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+}
+
+.comment-node {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(168, 32, 57, 0.15);
+  padding: 1.2rem;
+  border-radius: 8px;
+  transition: border-color 0.3s var(--ease-premium), transform 0.3s var(--ease-premium);
+}
+
+.comment-node:hover {
+  border-color: rgba(168, 32, 57, 0.4);
+  transform: translateX(2px);
+}
+
+.comment-node-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.comment-node-author {
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.comment-node-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.comment-node-date {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.delete-comment-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.2rem;
+  transition: color 0.2s var(--ease-premium), transform 0.2s var(--ease-premium);
+}
+
+.delete-comment-btn:hover {
+  color: #EF4444; /* Clean crimson crimson highlight alert on hover */
+  transform: scale(1.15);
+}
+
+.comment-node-body {
+  color: #D1D5DB;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* ==========================================================================
    9. FOOTER
    ========================================================================== */
 .main-footer {

@@ -42,13 +42,13 @@ export const PROJECTS = [
   },
   {
     title: "Student Complaint Analysis",
-    desc: "A group project using NLP to classify university student complaints, the classifier module is also a prototype for the Sovereign Dialect",
+    desc: "A group project using NLP to classify university student complaints, the classifier module is also a prototype for the Sovereign Dialect.",
     link: "https://university-complaint-classifier.streamlit.app/",
     image: "/images/Porto3.png"
   },
   {
     title: "Sovereign Dialect Bridge",
-    desc: "A group project, using an NLP model to summarize and classify complaints in regional dialects (such as Sundanese, Javanese, Balinese)",
+    desc: "A group project, using an NLP model to summarize and classify complaints in regional dialects (such as Sundanese, Javanese, Balinese).",
     link: " https://sovereign-dialect-bridge.vercel.app/",
     image: "/images/Porto2.png"
   }

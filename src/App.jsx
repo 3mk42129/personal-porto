@@ -7,9 +7,25 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState({ text: '', type: '' });
+  
+  // DYNAMIC LIVE COMMENT STORAGE STATE ENGINE
+  const [comments, setComments] = useState([
+    {
+      id: 1,
+      name: 'Padlan',
+      date: 'Jun 12, 2026',
+      text: 'The portfolio performance is looking super clean on absolute black! Let me know when you want to run the testing simulation.'
+    },
+    {
+      id: 2,
+      name: 'Iki',
+      date: 'Jun 14, 2026',
+      text: 'That color shifting animation on your name is awesome. Fits perfectly with the premium dark theme.'
+    }
+  ]);
+
   const canvasRef = useRef(null);
 
-  // Clear form alert messages automatically
   useEffect(() => {
     if (formStatus.text) {
       const timeout = setTimeout(() => setFormStatus({ text: '', type: '' }), 5000);
@@ -82,8 +98,9 @@ function App() {
     };
   }, []);
 
+  // FIXED: Corrected the regex typo pattern to properly evaluate real email targets
   const validateEmail = (email) => {
-    return /^[\s@]+@[\s@]+\.[\s@]+$/.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   const handleContactSubmit = (e) => {
@@ -99,8 +116,29 @@ function App() {
       return;
     }
 
-    setFormStatus({ text: 'Thank you for your message! We will get back to you soon.', type: 'success' });
+    // Capture and construct new comment matrix
+    const timestamp = new Date().toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+
+    const newComment = {
+      id: Date.now(),
+      name: name.trim(),
+      date: timestamp,
+      text: message.trim()
+    };
+
+    // Prepend new comment to public board
+    setComments([newComment, ...comments]);
+    setFormStatus({ text: 'Success! Your comment has been posted onto the wall.', type: 'success' });
     setFormData({ name: '', email: '', message: '' });
+  };
+
+  // ADDED: Direct state filtering mechanic to handle comment deletion on click
+  const handleDeleteComment = (id) => {
+    setComments(comments.filter(comment => comment.id !== id));
   };
 
   const scrollToContact = () => {
@@ -187,9 +225,36 @@ function App() {
                     <label>Message/Comment:</label>
                     <textarea value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} />
                   </div>
-                  <button type="submit" className="submit-button">Send Message</button>
+                  <button type="submit" className="submit-button">Send & Post Comment</button>
                   {formStatus.text && <div className={`form-message ${formStatus.type}`}>{formStatus.text}</div>}
                 </form>
+
+                {/* THE LIVE PUBLIC COMMENT BOARD ELEMENT */}
+                <div className="comments-wall-wrapper">
+                  <h3 className="comments-wall-title">Recent Comments ({comments.length})</h3>
+                  <div className="comments-stream">
+                    {comments.map((comment) => (
+                      <div key={comment.id} className="comment-node">
+                        <div className="comment-node-header">
+                          <span className="comment-node-author">{comment.name}</span>
+                          <div className="comment-node-meta">
+                            <span className="comment-node-date">{comment.date}</span>
+                            {/* Interactive Deletion Trigger */}
+                            <button 
+                              className="delete-comment-btn" 
+                              onClick={() => handleDeleteComment(comment.id)}
+                              title="Delete comment"
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        </div>
+                        <p className="comment-node-body">{comment.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
               </div>
             </section>
           </>
@@ -200,9 +265,9 @@ function App() {
             <h2 className="section-title">About Me</h2>
             <div className="about-box">
               <div className="about-text">
-                <p>Hello! My name is Matthew Ken Susanto, and I am currently pursuing a degree in Computer Science at BINUS University. My journey in the world of technology began with a fascination for how fast technology grows and how it affects our lives.</p>
-                <p>I enjoy solving complex problems, building intuitive user experiences, and continuously learning new technologies. My goal is to create impactful and innovative solutions that make a difference.</p>
-                <p>In my free time, I enjoy playing games, playing basketball, and exploring Machine Learning.</p>
+                <p>Hello! My name is Matthew Ken Susanto, and I am currently pursuing a degree in Computer Science at BINUS University. My journey in the world of technology began with a fascination for how fast technology grows and how it constantly affects our lives.</p>
+                <p>I enjoy solving complex problems, building AI related projects, exploring and experimenting on AI related stuff. My goal is to create impactful and practical solutions that make a difference.</p>
+                <p>In my free time, I really enjoy playing games and doing sports.</p>
               </div>
               <div className="about-image-wrapper">
                 <img src="/images/About_Me_picture.jpeg" alt="Matthew Portfolio" />
