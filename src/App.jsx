@@ -7,22 +7,6 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState({ text: '', type: '' });
-  
-  // DYNAMIC LIVE COMMENT STORAGE STATE ENGINE
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      name: 'Padlan',
-      date: 'Jun 12, 2026',
-      text: 'The portfolio performance is looking super clean on absolute black! Let me know when you want to run the testing simulation.'
-    },
-    {
-      id: 2,
-      name: 'Iki',
-      date: 'Jun 14, 2026',
-      text: 'That color shifting animation on your name is awesome. Fits perfectly with the premium dark theme.'
-    }
-  ]);
 
   const canvasRef = useRef(null);
 
@@ -98,7 +82,6 @@ function App() {
     };
   }, []);
 
-  // FIXED: Corrected the regex typo pattern to properly evaluate real email targets
   const validateEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
@@ -116,29 +99,9 @@ function App() {
       return;
     }
 
-    // Capture and construct new comment matrix
-    const timestamp = new Date().toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-
-    const newComment = {
-      id: Date.now(),
-      name: name.trim(),
-      date: timestamp,
-      text: message.trim()
-    };
-
-    // Prepend new comment to public board
-    setComments([newComment, ...comments]);
-    setFormStatus({ text: 'Success! Your comment has been posted onto the wall.', type: 'success' });
+    // Success state actions (Comment matrix arrays removed)
+    setFormStatus({ text: 'Success! Your message has been sent.', type: 'success' });
     setFormData({ name: '', email: '', message: '' });
-  };
-
-  // ADDED: Direct state filtering mechanic to handle comment deletion on click
-  const handleDeleteComment = (id) => {
-    setComments(comments.filter(comment => comment.id !== id));
   };
 
   const scrollToContact = () => {
@@ -175,7 +138,7 @@ function App() {
                 </li>
               ))}
               <li>
-                <button onClick={scrollToContact}>Contact & Comment</button>
+                <button onClick={scrollToContact}>Contact</button>
               </li>
             </ul>
           </nav>
@@ -211,7 +174,7 @@ function App() {
 
             <section id="contact" className="container">
               <div className="contact-form-container">
-                <h2 className="section-title">Contact & Comment</h2>
+                <h2 className="section-title">Contact Me</h2>
                 <form onSubmit={handleContactSubmit}>
                   <div className="form-group">
                     <label>Name:</label>
@@ -222,39 +185,12 @@ function App() {
                     <input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
                   </div>
                   <div className="form-group">
-                    <label>Message/Comment:</label>
+                    <label>Message:</label>
                     <textarea value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} />
                   </div>
-                  <button type="submit" className="submit-button">Send & Post Comment</button>
+                  <button type="submit" className="submit-button">Send Message</button>
                   {formStatus.text && <div className={`form-message ${formStatus.type}`}>{formStatus.text}</div>}
                 </form>
-
-                {/* THE LIVE PUBLIC COMMENT BOARD ELEMENT */}
-                <div className="comments-wall-wrapper">
-                  <h3 className="comments-wall-title">Recent Comments ({comments.length})</h3>
-                  <div className="comments-stream">
-                    {comments.map((comment) => (
-                      <div key={comment.id} className="comment-node">
-                        <div className="comment-node-header">
-                          <span className="comment-node-author">{comment.name}</span>
-                          <div className="comment-node-meta">
-                            <span className="comment-node-date">{comment.date}</span>
-                            {/* Interactive Deletion Trigger */}
-                            <button 
-                              className="delete-comment-btn" 
-                              onClick={() => handleDeleteComment(comment.id)}
-                              title="Delete comment"
-                            >
-                              &times;
-                            </button>
-                          </div>
-                        </div>
-                        <p className="comment-node-body">{comment.text}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
               </div>
             </section>
           </>
